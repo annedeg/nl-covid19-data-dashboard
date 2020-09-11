@@ -42,8 +42,8 @@
       "meer": "Meer informatie over het coronavirus",
       "verantwoording": "Cijferverantwoording",
       "meer_href": "https://www.rijksoverheid.nl/onderwerpen/coronavirus-covid-19",
-      "veiligheidsregio": "Veiligheidsregio",
-      "gemeente": "Gemeentelijk"
+      "veiligheidsregio": "Veiligheidsregio's",
+      "gemeente": "Gemeentes"
     },
     "title": "Corona Dashboard",
     "terug_naar_alle_cijfers": "Terug naar alle cijfers"
@@ -678,5 +678,9 @@
   "gemeente_index": {
     "selecteer_titel": "Selecteer een gemeente",
     "selecteer_toelichting": "Er gelden verschillende maatregelen per veiligheidsregio en gemeente"
+  },
+  "laatste_ontwikkelingen": {
+    "title": "Laatste ontwikkelingen",
+    "menu_subtitle": "Belangrijke verandering"
   }
 }

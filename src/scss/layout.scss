@@ -113,8 +113,8 @@
     width: 100%;
     padding: 1em;
     box-shadow: $box-shadow;
-    text-decoration: none;
-    z-index: 3;
+    position: relative;
+    z-index: 2;
 
     &:hover,
     &:focus {
@@ -260,6 +260,15 @@ a.metric-link {
   span {
     display: block;
     margin: 0 2.5rem;
+  }
+
+  &.last-developments-link {
+    margin-top: 2em;
+    min-height: 6em;
+
+    &::after {
+      top: 2em;
+    }
   }
 }
 
