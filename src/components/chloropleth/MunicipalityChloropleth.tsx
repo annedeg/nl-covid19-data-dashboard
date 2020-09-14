@@ -102,7 +102,13 @@ export default function MunicipalityChloropleth<
         />
       );
     },
-    [getFillColor, selected, hasData, safetyRegionMunicipalCodes]
+    [
+      getFillColor,
+      selected,
+      hasData,
+      safetyRegionMunicipalCodes,
+      highlightSelection,
+    ]
   );
 
   const overlayCallback = (
@@ -117,6 +123,23 @@ export default function MunicipalityChloropleth<
         key={`municipality-map-overlay-${index}`}
         d={path}
         fill={'none'}
+      />
+    );
+  };
+
+  const hoverCallback = (
+    feature: Feature<MultiPolygon, MunicipalityProperties>,
+    path: string,
+    index: number
+  ) => {
+    const { gemcode } = feature.properties;
+    return (
+      <path
+        className={styles.hoverLayer}
+        data-id={gemcode}
+        shapeRendering="optimizeQuality"
+        key={`municipality-map-hover-${index}`}
+        d={path}
       />
     );
   };
@@ -147,10 +170,12 @@ export default function MunicipalityChloropleth<
       <Chloropleth
         featureCollection={municipalGeo}
         overlays={overlays}
+        hovers={hasData ? municipalGeo : undefined}
         boundingbox={boundingbox || countryGeo}
         dimensions={dimensions}
         featureCallback={featureCallback}
         overlayCallback={overlayCallback}
+        hoverCallback={hoverCallback}
         onPathClick={onClick}
         getTooltipContent={getTooltipContent}
       />

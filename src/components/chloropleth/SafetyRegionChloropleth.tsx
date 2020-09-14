@@ -113,6 +113,24 @@ export default function SafetyRegionChloropleth<
     );
   };
 
+  const hoverCallback = (
+    feature: Feature<MultiPolygon, SafetyRegionProperties>,
+    path: string,
+    index: number
+  ) => {
+    const { vrcode } = feature.properties;
+
+    return (
+      <path
+        className={styles.hoverLayer}
+        data-id={vrcode}
+        shapeRendering="optimizeQuality"
+        key={`safetyregion-map-hover-${index}`}
+        d={path}
+      />
+    );
+  };
+
   const onClick = (id: string) => {
     if (onSelect) {
       const data = getData(id);
@@ -139,10 +157,12 @@ export default function SafetyRegionChloropleth<
       <Chloropleth
         featureCollection={regionGeo}
         overlays={countryGeo}
+        hovers={hasData ? regionGeo : undefined}
         boundingbox={boundingbox || countryGeo}
         dimensions={dimensions}
         featureCallback={featureCallback}
         overlayCallback={overlayCallback}
+        hoverCallback={hoverCallback}
         onPathClick={onClick}
         getTooltipContent={getTooltipContent}
       />

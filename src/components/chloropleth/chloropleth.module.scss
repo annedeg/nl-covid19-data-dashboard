@@ -22,27 +22,23 @@
     stroke-width: 0.5;
   }
 
-  path:hover {
-    stroke-width: 1.5;
-    stroke: #fff;
-  }
-
   path.selectedPath {
     stroke: black;
     stroke-width: 3;
   }
 
+  path.noData {
+    pointer-events: all;
+    fill: #fff;
+  }
+
   path.noData:hover {
+    pointer-events: all;
     fill: #62a0be;
   }
 
   path.faded {
     stroke: #c4c4c4;
-  }
-
-  path.faded:hover {
-    stroke: #c4c4c4;
-    stroke-width: 0.5;
   }
 
   path.overlay {
@@ -52,9 +48,14 @@
     fill: transparent;
   }
 
-  path.overlay:hover {
-    stroke: #01689b;
-    stroke-width: 1;
-    fill: transparent;
+  path.hoverLayer {
+    pointer-events: all;
+    fill: none;
+    stroke: transparent;
+  }
+
+  path.hoverLayer:hover {
+    stroke: #000000;
+    stroke-width: 1.5;
   }
 }
