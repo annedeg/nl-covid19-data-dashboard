@@ -80,11 +80,9 @@ export default function MunicipalityChloropleth<
       _index: number
     ) => {
       const { gemcode } = feature.properties;
-      const isSelected = gemcode === selected && highlightSelection;
       const isInSameRegion =
         (safetyRegionMunicipalCodes?.indexOf(gemcode) ?? 0) > -1;
       const className = classNames(
-        isSelected ? styles.selectedPath : undefined,
         !hasData ? styles.noData : undefined,
         isInSameRegion ? undefined : styles.faded
       );
@@ -102,13 +100,7 @@ export default function MunicipalityChloropleth<
         />
       );
     },
-    [
-      getFillColor,
-      selected,
-      hasData,
-      safetyRegionMunicipalCodes,
-      highlightSelection,
-    ]
+    [getFillColor, hasData, safetyRegionMunicipalCodes, highlightSelection]
   );
 
   const overlayCallback = (
@@ -127,22 +119,26 @@ export default function MunicipalityChloropleth<
     );
   };
 
-  const hoverCallback = (
-    feature: Feature<MultiPolygon, MunicipalityProperties>,
-    path: string,
-    index: number
-  ) => {
-    const { gemcode } = feature.properties;
-    return (
-      <path
-        className={styles.hoverLayer}
-        data-id={gemcode}
-        shapeRendering="optimizeQuality"
-        key={`municipality-map-hover-${index}`}
-        d={path}
-      />
-    );
-  };
+  const hoverCallback = useCallback(
+    (feature: Feature<MultiPolygon, MunicipalityProperties>, path: string) => {
+      const { gemcode } = feature.properties;
+      const isSelected = gemcode === selected && highlightSelection;
+      const className = classNames(
+        isSelected ? styles.selectedPath : styles.hoverLayer
+      );
+
+      return (
+        <path
+          className={className}
+          data-id={gemcode}
+          shapeRendering="optimizeQuality"
+          key={`municipality-map-hover-${gemcode}`}
+          d={path}
+        />
+      );
+    },
+    [selected]
+  );
 
   const onClick = (id: string) => {
     if (onSelect) {
