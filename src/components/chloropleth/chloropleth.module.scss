@@ -37,8 +37,12 @@
   }
 
   path.faded {
-    fill-opacity: 0.2;
-    stroke-opacity: 0.2;
+    stroke: #c4c4c4;
+  }
+
+  path.faded:hover {
+    stroke: #c4c4c4;
+    stroke-width: 0.5;
   }
 
   path.overlay {
