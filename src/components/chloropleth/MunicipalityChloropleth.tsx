@@ -87,7 +87,7 @@ export default function MunicipalityChloropleth<
         isInSameRegion ? undefined : styles.faded
       );
 
-      const fillColor = getFillColor(gemcode);
+      const fillColor = isInSameRegion ? getFillColor(gemcode) : 'white';
 
       return (
         <path
