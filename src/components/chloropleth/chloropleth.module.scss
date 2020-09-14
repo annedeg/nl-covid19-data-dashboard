@@ -18,14 +18,13 @@
 
   path {
     pointer-events: all;
-    stroke: grey;
+    stroke: #01689b;
     stroke-width: 0.5;
   }
 
   path:hover {
-    stroke-width: 2;
+    stroke-width: 1.5;
     stroke: #fff;
-    z-index: 1000;
   }
 
   path.selectedPath {
@@ -34,7 +33,7 @@
   }
 
   path.noData:hover {
-    stroke: black;
+    fill: #62a0be;
   }
 
   path.faded {
@@ -44,13 +43,13 @@
 
   path.overlay {
     pointer-events: none;
-    stroke: black;
-    stroke-width: 1;
+    stroke: #01689b;
+    stroke-width: 0.5;
     fill: transparent;
   }
 
   path.overlay:hover {
-    stroke: black;
+    stroke: #01689b;
     stroke-width: 1;
     fill: transparent;
   }
