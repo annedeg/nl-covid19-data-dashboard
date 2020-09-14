@@ -23,7 +23,7 @@ export type TProps<
 > = {
   metricName?: T;
   selected?: string;
-  highlightSelection: boolean;
+  highlightSelection?: boolean;
   style?: CSSProperties;
   onSelect?: (context: TContext) => void;
   tooltipContent?: (context: TContext) => ReactNode;
