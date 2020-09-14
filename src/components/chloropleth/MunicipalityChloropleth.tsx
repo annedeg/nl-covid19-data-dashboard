@@ -23,6 +23,7 @@ export type TProps<
 > = {
   metricName?: T;
   selected?: string;
+  highlightSelection: boolean;
   style?: CSSProperties;
   onSelect?: (context: TContext) => void;
   tooltipContent?: (context: TContext) => ReactNode;
@@ -56,6 +57,7 @@ export default function MunicipalityChloropleth<
     onSelect,
     tooltipContent,
     gradient,
+    highlightSelection = true,
   } = props;
 
   const [ref, dimensions] = useChartDimensions();
@@ -78,7 +80,7 @@ export default function MunicipalityChloropleth<
       _index: number
     ) => {
       const { gemcode } = feature.properties;
-      const isSelected = gemcode === selected;
+      const isSelected = gemcode === selected && highlightSelection;
       const isInSameRegion =
         (safetyRegionMunicipalCodes?.indexOf(gemcode) ?? 0) > -1;
       const className = classNames(
