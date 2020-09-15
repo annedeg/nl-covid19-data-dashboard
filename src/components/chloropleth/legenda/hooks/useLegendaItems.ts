@@ -18,7 +18,7 @@ export default function useLegendaItems(
       domain: domain,
       range: gradient,
     });
-    const numberOfItems = calculateSmallestDivisible(max - min);
+    const numberOfItems = calculateDivisible(max - min);
     const steps = (max - min) / numberOfItems;
 
     const calcValue = (i: number) => {
@@ -47,7 +47,7 @@ export default function useLegendaItems(
   }, [domain, gradient]);
 }
 
-function calculateSmallestDivisible(input: number) {
+function calculateDivisible(input: number) {
   let div = 5;
   let quotient = Math.floor(input / div);
 

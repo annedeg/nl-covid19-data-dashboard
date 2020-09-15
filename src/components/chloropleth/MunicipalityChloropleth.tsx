@@ -1,8 +1,8 @@
 import classNames from 'classnames';
-import { TMunicipalityMetricName } from './shared';
+import { SafetyRegionProperties, TMunicipalityMetricName } from './shared';
 
 import Chloropleth from './Chloropleth';
-import { Feature, MultiPolygon } from 'geojson';
+import { Feature, GeoJsonProperties, MultiPolygon } from 'geojson';
 import useChartDimensions from './hooks/useChartDimensions';
 
 import styles from './chloropleth.module.scss';
@@ -62,7 +62,10 @@ export default function MunicipalityChloropleth<
 
   const [ref, dimensions] = useChartDimensions();
 
-  const boundingbox = useMunicipalityBoundingbox(regionGeo, selected);
+  const [boundingbox, selectedVrCode] = useMunicipalityBoundingbox(
+    regionGeo,
+    selected
+  );
 
   const [getData, hasData, domain] = useMunicipalityData(
     metricName,
@@ -100,32 +103,49 @@ export default function MunicipalityChloropleth<
         />
       );
     },
-    [getFillColor, hasData, safetyRegionMunicipalCodes, highlightSelection]
+    [getFillColor, hasData, safetyRegionMunicipalCodes]
   );
 
-  const overlayCallback = (
-    _feature: Feature<MultiPolygon>,
-    path: string,
-    index: number
-  ) => {
-    return (
-      <path
-        className={styles.overlay}
-        shapeRendering="optimizeQuality"
-        key={`municipality-map-overlay-${index}`}
-        d={path}
-        fill={'none'}
-      />
-    );
-  };
+  const overlayCallback = useCallback(
+    (
+      feature: Feature<
+        MultiPolygon,
+        SafetyRegionProperties | GeoJsonProperties
+      >,
+      path: string,
+      index: number
+    ) => {
+      const { vrcode } = feature.properties as SafetyRegionProperties;
+      const className = classNames(
+        vrcode !== selectedVrCode ? styles.faded : styles.overlay
+      );
+
+      return (
+        <path
+          className={className}
+          shapeRendering="optimizeQuality"
+          key={`municipality-map-overlay-${index}`}
+          d={path}
+          fill={'none'}
+        />
+      );
+    },
+    [selectedVrCode]
+  );
 
   const hoverCallback = useCallback(
     (feature: Feature<MultiPolygon, MunicipalityProperties>, path: string) => {
       const { gemcode } = feature.properties;
+      const isInSameRegion =
+        (safetyRegionMunicipalCodes?.indexOf(gemcode) ?? 0) > -1;
       const isSelected = gemcode === selected && highlightSelection;
       const className = classNames(
         isSelected ? styles.selectedPath : styles.hoverLayer
       );
+
+      if (selected && !isInSameRegion) {
+        return null;
+      }
 
       return (
         <path
@@ -137,7 +157,7 @@ export default function MunicipalityChloropleth<
         />
       );
     },
-    [selected]
+    [selected, highlightSelection, safetyRegionMunicipalCodes]
   );
 
   const onClick = (id: string) => {

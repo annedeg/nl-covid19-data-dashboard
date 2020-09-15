@@ -92,7 +92,7 @@ export default function SafetyRegionChloropleth<
         />
       );
     },
-    [getFillColor, hasData, selected]
+    [getFillColor, hasData]
   );
 
   const overlayCallback = (
@@ -129,7 +129,7 @@ export default function SafetyRegionChloropleth<
         />
       );
     },
-    [selected]
+    [selected, highlightSelection]
   );
 
   const onClick = (id: string) => {
