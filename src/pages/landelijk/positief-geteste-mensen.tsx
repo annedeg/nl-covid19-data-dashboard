@@ -94,26 +94,6 @@ const PositivelyTestedPeople: FCWithLayout<INationalData> = (props) => {
             </h3>
           )}
           <p>{text.kpi_toelichting}</p>
-          {ggdData && ggdData.percentage_infected_ggd && (
-            <div className="ggd-summary">
-              <h4
-                dangerouslySetInnerHTML={{
-                  __html: replaceKpisInText(ggdText.summary_title, [
-                    {
-                      name: 'percentage',
-                      value: `${formatNumber(
-                        ggdData.percentage_infected_ggd
-                      )}%`,
-                      className: 'text-blue',
-                    },
-                  ]),
-                }}
-              ></h4>
-              <p>
-                <a href="#ggd">{ggdText.summary_link_cta}</a>
-              </p>
-            </div>
-          )}
         </article>
       </div>
 
