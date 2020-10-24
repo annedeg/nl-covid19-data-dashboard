@@ -3,6 +3,11 @@ import { useRouter } from 'next/router';
 import path from 'path';
 import fs from 'fs';
 
+import BlockContent from '@sanity/block-content-to-react';
+import client, { localize } from '~/lib/sanity';
+
+import { targetLanguage } from '../locale/index';
+
 import styles from './index.module.scss';
 import { National } from '~/types/data';
 import { INationalData } from '~/static-props/nl-data';
@@ -29,11 +34,13 @@ import { EscalationMapLegenda } from './veiligheidsregio';
 import { MDToHTMLString } from '~/utils/MDToHTMLString';
 
 const Home: FCWithLayout<INationalData> = (props) => {
-  const { text } = props;
+  const { text, ontwikkelingen } = props;
   const router = useRouter();
   const [selectedMap, setSelectedMap] = useState<'municipal' | 'region'>(
     'municipal'
   );
+
+  console.log(ontwikkelingen);
 
   const legendItems = useSafetyRegionLegendaData('positive_tested_people');
 
@@ -46,17 +53,17 @@ const Home: FCWithLayout<INationalData> = (props) => {
       />
       <article className={`${styles.notification} metric-article`}>
         <div className={styles.textgroup}>
-          <h3 className={styles.header}>{text.notificatie.titel}</h3>
-          <p>{text.notificatie.bericht}</p>
+          <h3 className={styles.header}>{ontwikkelingen.title}</h3>
+          <BlockContent blocks={ontwikkelingen.description} />
         </div>
         <a
           className={styles.link}
-          href={text.notificatie.link.href}
+          href={ontwikkelingen.externalLink.url}
           target="_blank"
           rel="noopener noreferrer"
         >
           <ExternalLink />
-          <span>{text.notificatie.link.text}</span>
+          <span>{ontwikkelingen.externalLink.text}</span>
         </a>
       </article>
 
@@ -130,6 +137,7 @@ interface StaticProps {
     data: National;
     text: TALLLanguages;
     lastGenerated: string;
+    ontwikkelingen: any;
   };
 }
 
@@ -147,7 +155,28 @@ export async function getStaticProps(): Promise<StaticProps> {
   const data = JSON.parse(fileContents) as National;
   const lastGenerated = data.last_generated;
 
-  return { props: { data, text, lastGenerated } };
+  console.log(targetLanguage);
+
+  const laatsteOntwikkelingen = await client.fetch(
+    `
+    *[_type == 'laatsteOntwikkelingen']
+    {
+      _id,
+      title,
+      description,
+      externalLink,  
+    }[0]
+  `
+  );
+
+  const ontwikkelingen = localize(laatsteOntwikkelingen, [
+    targetLanguage,
+    'nl',
+  ]);
+
+  console.log(ontwikkelingen);
+
+  return { props: { data, text, ontwikkelingen, lastGenerated } };
 }
 
 export default Home;
