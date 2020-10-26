@@ -4,8 +4,6 @@ import ts, {
   Node,
   Identifier,
   ImportDeclaration,
-  Token,
-  Expression,
   VariableDeclaration,
   PropertyAccessExpression,
   PrivateIdentifier,
