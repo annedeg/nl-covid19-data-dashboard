@@ -10,7 +10,7 @@
   },
   "notificatie": {
     "titel": "Minder sterkte stijging aantal meldingen COVID-19",
-    "bericht": "Afgelopen week (14 t/m 20 oktober) steeg het aantal meldingen van mensen die positief testen op COVID-19, het aantal patiënten in de ziekenhuizen en het aantal intensive care-opnames verder. De snelheid waarmee het aantal nieuwe meldingen van mensen die positief testen stijgt, lijkt echter iets af te nemen. Dit zou een gevolg kunnen zijn van de maatregelen die eind september van kracht werden. Echter het aantal ziekenhuisopnames stijgt onveranderd door. \n\nHet risiconiveau per regio kan ‘waakzaam’ (niveau 1), ‘zorgelijk’ (niveau 2), ‘ernstig’ (niveau 3), ‘zeer ernstig’ (niveau 4) zijn. Op dit moment zijn 16 regio’s ingeschaald op ‘zeer ernstig’, 7 op ‘ernstig’ en 2 op ‘zorgelijk.’",
+    "bericht": "Afgelopen week (14 t/m 20 oktober) steeg het aantal meldingen van mensen die positief testen op COVID-19, het aantal patiënten in de ziekenhuizen en het aantal intensive care-opnames verder. De snelheid waarmee het aantal nieuwe meldingen van mensen die positief testen stijgt, lijkt echter iets af te nemen. Dit zou een gevolg kunnen zijn van de maatregelen die eind september van kracht werden. Echter het aantal ziekenhuisopnames stijgt onveranderd door. \n\nHet risiconiveau per regio kan ‘waakzaam’ (niveau 1), ‘zorgelijk’ (niveau 2), ‘ernstig’ (niveau 3), ‘zeer ernstig’ (niveau 4) zijn. Op dit moment zijn {{escalationLevel4}} regio’s ingeschaald op ‘zeer ernstig’, {{escalationLevel3}} op ‘ernstig’, {{escalationLevel2}} op ‘zorgelijk’ en {{escalationLevel1}} op ‘waakzaam.‘",
     "link": {
       "text": "Bekijk de toelichting van het RIVM",
       "href": "https://www.rivm.nl/coronavirus-covid-19/actueel"
@@ -39,13 +39,13 @@
     "links": {
       "index": "Landelijk",
       "over": "Over dit dashboard",
-      "veelgestelde_vragen": "Veelgestelde vragen",
       "meer": "Meer informatie over het coronavirus",
       "verantwoording": "Cijferverantwoording",
       "meer_href": "https://www.rijksoverheid.nl/onderwerpen/coronavirus-covid-19",
       "veiligheidsregio": "Veiligheidsregio's",
       "gemeente": "Gemeentes",
-      "over_risiconiveaus": "Over de risiconiveaus"
+      "over_risiconiveaus": "Over de risiconiveaus",
+      "veelgestelde_vragen": "Veelgestelde vragen"
     },
     "title": "Corona Dashboard",
     "terug_naar_alle_cijfers": "Terug naar alle cijfers",
@@ -85,7 +85,7 @@
       "title": "Intensive care-opnames | Dashboard Coronavirus | Rijksoverheid.nl",
       "description": "Landelijk overzicht van het aantal mensen met bevestigd COVID-19 dat per dag op een intensive care-afdeling van een ziekenhuis is opgenomen."
     },
-    "titel_sidebar": "Intensive care-opnames",
+    "titel_sidebar": "Intensive care-opnames per dag",
     "titel_kpi": "Intensive care-opnames per dag"
   },
   "verdenkingen_huisartsen": {
@@ -157,7 +157,7 @@
       "title": "Ziekenhuisopnames | Dashboard Coronavirus | Rijksoverheid.nl",
       "description": "Landelijk overzicht van het aantal mensen met COVID-19 dat een ziekenhuis is opgenomen."
     },
-    "titel_sidebar": "Ziekenhuisopnames",
+    "titel_sidebar": "Ziekenhuisopnames per dag",
     "titel_kpi": "Ziekenhuisopnames per dag"
   },
   "positief_geteste_personen": {
@@ -395,7 +395,7 @@
     "text": "Selecteer uw regio bovenaan deze pagina"
   },
   "rioolwater_metingen": {
-    "datums": "Waarde van {{dateOfReport}}. Verkregen: {{dateOfInsertion}}. Wordt wekelijks bijgewerkt.",
+    "datums": "Waarde van {{weekStart}} tot {{weekEnd}}. Verkregen: {{dateOfInsertion}}. Wordt dagelijks bijgewerkt.",
     "bron": {
       "text": "RIVM",
       "href": "https://data.rivm.nl/geonetwork/srv/dut/catalog.search#/metadata/a2960b68-9d3f-4dc3-9485-600570cd52b9"
@@ -405,13 +405,16 @@
     "barscale_titel": "Gemiddeld aantal virusdeeltjes in een milliliter rioolwater",
     "extra_uitleg": "Voor het landelijke cijfer wordt uitgegaan van het totaal aantal gemeten virusdeeltjes dat wordt aangetroffen in een week, gedeeld door het aantal metingen.",
     "barscale_screenreader_text": "{{value}} virusdeeltjes in een milliliter rioolwater, afkomstig van 300 locaties in Nederland.",
-    "linechart_titel": "Verloop over tijd",
+    "linechart_titel": "Virusdeeltjes per milliliter rioolwater over tijd",
     "metadata": {
       "title": "Rioolwatermeting | Dashboard Coronavirus | Rijksoverheid.nl",
       "description": "Gemiddeld aantal virusdeeltjes in een milliliter rioolwater, afkomstig van circa 300 locaties in Nederland."
     },
     "titel_sidebar": "Rioolwatermeting",
-    "titel_kpi": "Gemiddeld aantal virusdeeltjes in een milliliter rioolwater"
+    "titel_kpi": "Gemiddeld aantal virusdeeltjes in een milliliter rioolwater",
+    "total_installation_count_titel": "Aantal RWZI-locaties",
+    "total_installation_count_description": "Aantal locaties dat wordt meegenomen in het berekenen van het gemiddelde.",
+    "rwzi_abbrev": "RWZI = Rioolwaterzuiveringsinstallatie."
   },
   "notfound_titel": {
     "text": "Er is iets misgegaan"
@@ -430,8 +433,7 @@
     "text": "Het dashboard coronavirus geeft informatie over de ontwikkeling van het coronavirus in Nederland. Met deze informatie kunnen signalen van oplevingen worden opgepikt. Zo kunnen maatregelen genomen worden om het virus te stoppen."
   },
   "over_veelgestelde_vragen": {
-    "titel": "Veelgestelde vragen",
-    "paragraaf": "",
+    "text": "Veelgestelde vragen",
     "vragen": [
       {
         "vraag": "Wat doet dit dashboard?",
@@ -489,7 +491,9 @@
         "vraag": "Hoe komt het dat als ik het aantal positief geteste mensen per regio bij elkaar optel, er een ander getal uitkomt dan het landelijke cijfer?",
         "antwoord": "We berekenen de toename van het aantal positief geteste mensen door het gerapporteerde cumulatief aantal meldingen van positief geteste mensen van vandaag, af te trekken van het cumulatief aantal van gisteren. Correcties over oude data, zoals dubbeltellingen, worden door het RIVM verwerkt op de datum dat dit bekend is. Het gerapporteerde nieuwe aantal meldingen voor die dag ligt dan lager dan het feitelijk aantal die dag. Daar staat tegenover dat voorgaande dagen er dus teveel gevallen zijn gerapporteerd. Door correctie kan het cumulatieve aantal van vandaag lager zijn dan het cumulatieve aantal van gisteren. In die gevallen wordt er op het dashboard de waarde 0 gepresenteerd in plaats van een negatief waarde; een negatieve waarde is namelijk verwarrend. Daarom krijg je uiteindelijk verschillen als je regio's optelt naar landelijk. Als je de negatieve waarden zou meerekenen kom je wel op de juiste getallen uit."
       }
-    ]
+    ],
+    "titel": "Veelgestelde vragen",
+    "paragraaf": ""
   },
   "terug_naar_regio_selectie": {
     "text": "Terug naar regio selectie"
@@ -512,7 +516,7 @@
       },
       {
         "cijfer": "Aantal positief geteste mensen",
-        "verantwoording": "Deze gegevens worden dagelijks gepubliceerd als open databestand door het [RIVM](https://data.rivm.nl/covid-19/COVID-19_aantallen_gemeente_per_dag.csv) Het bestand wordt dagelijks om 10:00 online gezet en registreert het aantal positief geteste mensen die aan het RIVM gemeld zijn in de afgelopen 24 uur. De datum die gebruikt wordt, is de datum van melding. Dat is dus niet hetzelfde als de datum waarop mensen zijn getest.\n\nHet RIVM kan met terugwerkende kracht correcties uitvoeren op eerder gepubliceerde cijfers. Deze correcties komen dan in het open databestand te staan en worden overgenomen door het dashboard.\n\nHet databestand registreert op niveau van veiligheidsregio en gemeente. Om tot landelijke gegevens te komen tellen we alle meldingen bij elkaar op. In het aanleverbestand wordt voor sommige meldingen de gemeente en/of veiligheidsregio niet vermeld, omdat die gegevens ontbreken. Die kunnen dan niet op dat niveau worden getoond, maar wel op landelijk niveau. \n\nWe berekenen op basis van de absolute aantallen het relatieve aantal positief geteste mensen naar rato van het aantal inwoners. Dit doen we door het aantal positief geteste mensen te delen door het aantal inwoners van Nederland. We geven dit weer als het aantal positief geteste personen per 100.000 inwoners. Het aantal inwoners wordt gebaseerd op [deze CBS-indeling](https://opendata.cbs.nl/#/CBS/nl/dataset/84721NED/table?dl=3A154).\n\nDe leeftijdsverdeling wordt bepaald op basis van de landelijke cijfers, omdat in het gemeentelijke bestand geen leeftijden worden geregistreerd. Er kunnen daarom kleine verschillen ontstaan tussen de tabel zoals weergegeven in de 'wekelijks update epidemiologische situatie COVID-19 in Nederland' op de website van het RIVM en zoals weergeven op het dashboard.\n\nDe signaalwaarde voor het aantal positief geteste mensen is toegevoegd. Deze bedraagt 7 op de 100.000 inwoners. Dit betekent dat vanaf deze waarde mogelijk het aantal besmettingen te hard oploopt om het virus in de hand te houden. Deze waarde wordt bijvoorbeeld ook in Duitsland gehanteerd. Een signaalwaarde functioneert als een ‘alarmbel’ om met urgentie naar de situatie te kijken. Mogelijk wordt deze waarde in de loop van de tijd verder verfijnd.\n\nHet percentage positief geteste mensen gaat alleen over de testen die via de GGD plaatsvinden, en waarvan de testuitslag bekend is. Er worden echter ook tests uitgevoerd die niet via de GGD gaan. De gegevens over de GGD teststraten worden wekelijks door het RIVM aangeleverd bij het ministerie van VWS."
+        "verantwoording": "Deze gegevens worden dagelijks gepubliceerd als open databestand door het [RIVM](https://data.rivm.nl/covid-19/COVID-19_aantallen_gemeente_per_dag.csv) Het bestand wordt dagelijks om 10:00 online gezet en registreert het aantal positief geteste mensen die aan het RIVM gemeld zijn in de afgelopen 24 uur. De datum die gebruikt wordt, is de datum van melding. Dat is dus niet hetzelfde als de datum waarop mensen zijn getest.\n\nHet RIVM kan met terugwerkende kracht correcties uitvoeren op eerder gepubliceerde cijfers. Deze correcties komen dan in het open databestand te staan en worden overgenomen door het dashboard.\n\nHet databestand registreert op niveau van veiligheidsregio en gemeente. Om tot landelijke gegevens te komen tellen we alle meldingen bij elkaar op. In het aanleverbestand wordt voor sommige meldingen de gemeente en/of veiligheidsregio niet vermeld, omdat die gegevens ontbreken. Die kunnen dan niet op dat niveau worden getoond, maar wel op landelijk niveau. \n\nWe berekenen op basis van de absolute aantallen het relatieve aantal positief geteste mensen naar rato van het aantal inwoners. Dit doen we door het aantal positief geteste mensen te delen door het aantal inwoners van Nederland. We geven dit weer als het aantal positief geteste personen per 100.000 inwoners. Het aantal inwoners wordt gebaseerd op [deze CBS-indeling](https://opendata.cbs.nl/#/CBS/nl/dataset/84721NED/table?dl=3A154).\n\nDe leeftijdsverdeling wordt bepaald op basis van een ander [open data bestand](https://data.rivm.nl/covid-19/COVID-19_casus_landelijk.csv) van het RIVM. In dit bestand staan namelijk wel leeftijdsgegevens. Echter is dit alleen op landelijk niveau beschikbaar, en niet per veiligheidsregio of gemeente. Op het dashboard wordt de leeftijdsverdeling getoond van alle nieuw gemelde gevallen, ten opzichte van de dag ervoor. Verder zitten in het bestand gevallen waarbij de leeftijd onbekend is, of waarbij alleen staat genoteerd dat de persoon onder de 50 is. Deze kunnen niet worden getoond in de gekozen leeftijdsgroepen, en worden daarom niet meegenomen bij het berekenen van de percentages. Dit zorgt er echter wel voor dat het totaal aantal gevallen in de leeftijdsverdeling, minder is dan het totaal aantal positief geteste mensen.\n\nDe signaalwaarde voor het aantal positief geteste mensen bedraagt 7 op de 100.000 inwoners. Dit betekent dat vanaf deze waarde mogelijk het aantal besmettingen te hard oploopt om het virus in de hand te houden. Deze waarde wordt bijvoorbeeld ook in Duitsland gehanteerd. Een signaalwaarde functioneert als een ‘alarmbel’ om met urgentie naar de situatie te kijken. \n\nHet percentage positief geteste mensen gaat alleen over de testen die via de GGD plaatsvinden, en waarvan de testuitslag bekend is. Er worden echter ook tests uitgevoerd die niet via de GGD gaan. De gegevens over de GGD teststraten worden wekelijks door het RIVM aangeleverd bij het ministerie van VWS."
       },
       {
         "cijfer": "Reproductiegetal",
@@ -576,11 +580,6 @@
     "description": "Informatie over de ontwikkeling van het coronavirus in Nederland.",
     "url": "https://coronadashboard.rijksoverheid.nl/over"
   },
-  "veelgestelde_vragen_metadata": {
-    "title": "Veelgestelde vragen Coronavirus COVID-19 Dashboard | Rijksoverheid.nl",
-    "description": "Informatie over de ontwikkeling van het coronavirus in Nederland.",
-    "url": "https://coronadashboard.rijksoverheid.nl/veelgestelde-vragen"
-  },
   "regionaal_metadata": {
     "title": "Regionaal Dashboard Coronavirus COVID-19 | Rijksoverheid.nl",
     "description": "Informatie over de ontwikkeling van het coronavirus in Nederland.",
@@ -635,6 +634,9 @@
     "veiligheidsregio_label": "Veiligheidsregio:",
     "metricKPI": {
       "dateOfReport": "Waarde van {{dateOfReport}}"
+    },
+    "tooltip": {
+      "positive_tested_people": "{{totalPositiveTestedPeople}} in totaal"
     }
   },
   "seoHead": {
@@ -743,13 +745,13 @@
     "titel_sidebar": "Rioolwatermeting",
     "titel": "Rioolwatermeting in {{safetyRegion}}",
     "pagina_toelichting": "Gemiddeld aantal virusdeeltjes in een milliliter rioolwater van deze veiligheidsregio. Voor deze berekening wordt uitgegaan van het totaal aantal gemeten virusdeeltjes in één week, gedeeld door het aantal metingen.",
-    "datums": "Waarde van {{dateOfReport}}. Verkregen: {{dateOfInsertion}}. Wordt wekelijks bijgewerkt.",
+    "datums": "Waarde van {{dateOfReport}}. Verkregen: {{dateOfInsertion}}. Wordt dagelijks bijgewerkt.",
     "screen_reader_graph_content": "{{value}} virusdeeltjes in een milliliter rioolwater.",
     "barscale_titel": "Gemiddeld aantal virusdeeltjes in een milliliter rioolwater van deze veiligheidsregio",
     "extra_uitleg": "Voor deze berekening wordt uitgegaan van het totaal aantal gemeten virusdeeltjes in één week, gedeeld door het aantal metingen.",
     "barscale_screenreader_text": "{{value}} virusdeeltjes in een milliliter rioolwater, afkomstig van 28 locaties in Nederland.",
-    "linechart_titel": "Verloop over tijd",
-    "bar_chart_title": "Laatste bekende waarde per RWZI-locatie in {{safetyRegion}}",
+    "linechart_titel": "Virusdeeltjes per milliliter rioolwater over tijd",
+    "bar_chart_title": "Meest recente meetwaarde per locatie in {{safetyRegion}}",
     "bar_chart_axis_title": "Aantal virusdeeltjes in milliliter rioolwater",
     "bron": {
       "text": "RIVM",
@@ -763,10 +765,13 @@
       "title": "Rioolwatermeting in {{safetyRegionName}} | Dashboard Coronavirus | Rijksoverheid.nl",
       "description": "Overzicht van rioolwatermetingen en aangetroffen COVID-19 virusdeeltjes in de veiligheidsregio {{safetyRegionName}}."
     },
-    "graph_daily_label_text_rwzi": "Dagwaarde aantal virusdeeltjes in 1 mL rioolwater ({{name}})",
-    "graph_selected_rwzi_placeholder": "Selecteer RWZI",
+    "graph_daily_label_text_rwzi": "Meetwaarden locatie ({{name}})",
+    "graph_selected_rwzi_placeholder": "Selecteer locatie",
     "graph_range_description": "Verloop over tijd",
-    "titel_kpi": "Gemiddeld aantal virusdeeltjes in een milliliter rioolwater"
+    "titel_kpi": "Gemiddeld aantal virusdeeltjes in een milliliter rioolwater",
+    "total_installation_count_titel": "Aantal RWZI-locaties",
+    "total_installation_count_description": "Aantal locaties dat wordt meegenomen in het berekenen van het gemiddelde.",
+    "rwzi_abbrev": "RWZI = Rioolwaterzuiveringsinstallatie."
   },
   "gemeente_ziekenhuisopnames_per_dag": {
     "titel_sidebar": "Ziekenhuisopnames per dag",
@@ -829,13 +834,13 @@
     "titel_sidebar": "Rioolwatermeting",
     "titel": "Rioolwatermeting in {{municipality}}",
     "pagina_toelichting": "Gemiddeld aantal virusdeeltjes in een milliliter rioolwater van deze gemeente. Voor deze berekening wordt uitgegaan van het totaal aantal gemeten virusdeeltjes in één week, gedeeld door het aantal metingen.",
-    "datums": "Waarde van {{dateOfReport}}. Verkregen: {{dateOfInsertion}}. Wordt wekelijks bijgewerkt.",
+    "datums": "Waarde van {{dateOfReport}}. Verkregen: {{dateOfInsertion}}. Wordt dagelijks bijgewerkt.",
     "screen_reader_graph_content": "{{value}} virusdeeltjes in een milliliter rioolwater.",
     "barscale_titel": "Gemiddeld aantal virusdeeltjes in een milliliter rioolwater van deze gemeente",
     "extra_uitleg": "Voor deze berekening wordt uitgegaan van het totaal aantal gemeten virusdeeltjes in één week, gedeeld door het aantal metingen.",
     "barscale_screenreader_text": "{{value}} virusdeeltjes in een milliliter rioolwater, afkomstig van 300 locaties in Nederland.",
-    "linechart_titel": "Verloop over tijd",
-    "bar_chart_title": "Laatste bekende waarde per RWZI-locatie in {{municipality}}",
+    "linechart_titel": "Virusdeeltjes per milliliter rioolwater over tijd",
+    "bar_chart_title": "Meest recente meetwaarde per locatie in {{municipality}}",
     "bar_chart_axis_title": "Aantal virusdeeltjes in milliliter rioolwater",
     "bron": {
       "text": "RIVM",
@@ -919,11 +924,17 @@
     "totaal_getest_week_uitleg": "Aantal personen die in één week via de GGD getest zijn, en waarvan de testuitslag bekend is.",
     "positief_getest_week_titel": "Positief geteste personen",
     "positief_getest_week_uitleg": "Aantal en percentage positief geteste personen die in één week via de GGD getest zijn. Voor het berekenen van het percentage worden alleen tests meegeteld waarvan de testuitslag bekend is.",
-    "positief_getest_getest_week_uitleg": "Dit zijn {{numerator}} van {{denominator}} geteste personen"
+    "positief_getest_getest_week_uitleg": "Dit zijn {{numerator}} van {{denominator}} geteste personen",
+    "linechart_percentage_titel": "Percentage positieve testen over tijd",
+    "linechart_percentage_toelichting": "Deze grafiek toont het percentage positief geteste mensen door de GGD over tijd",
+    "linechart_totaltests_titel": "Aantal testen over tijd",
+    "linechart_totaltests_toelichting": "Deze grafiek toont het aantal afgenomen testen over tijd in vergelijking met het aantal positieve testen.",
+    "linechart_totaltests_legend_label": "Alle GGD tests",
+    "linechart_positivetests_legend_label": "Alle positieve testen van de GGD"
   },
   "over_risiconiveaus": {
     "title": "Over risiconiveaus",
-    "toelichting": "Iedere week wordt bekeken of de situatie rond het coronavirus zich positief of negatief ontwikkelt. Dan beoordelen het Rijk, de GGD’en, het RIVM en de veiligheidsregio’s samen de situatie. De minister van VWS stelt vervolgens vast op welk risiconiveau een regio zit. Moeten we waakzaam zijn (niveau 1), is de situatie zorgelijk (niveau 2),is de situatie  ernstig (niveau 3), of is de situatie zelfs zeer ernstig te noemen (niveau 4)?\n\nOp basis van het risiconiveau nemen het Rijk en/of de veiligheidsregio passende maatregelen. Maatregelen zijn afhankelijk van de lokale situatie en kunnen daarom tussen regio’s verschillen.\n\n**Wat bepaalt het risiconiveau van een regio?**\n\nIn welk risiconiveau een regio zit, wordt bepaald door te kijken naar de situatie van een regio, die van de omliggende regio’s en de situatie in de rest van het land. Dit gebeurt op basis van informatie van het coronadashboard, het weekrapport van het RIVM, de duiding van de GGD’en en de duiding van de veiligheidsregio’s.\n\nVoor het risiconiveau van een regio wordt gelet op een aantal aspecten, bijvoorbeeld:\n\n- Hoe snel neemt het aantal nieuwe besmettingen toe?\n- Zijn er extra maatregelen nodig voor kwetsbare groepen?\n- Hoe effectief is het bron- en contactonderzoek nog?\n- Hoe goed worden de maatregelen nageleefd?\n- Is er nog voldoende zorg beschikbaar?\n\n**Wanneer gaat een regio naar ‘zorgelijk’, ‘ernstig’ of ‘zeer ernstig’?**\n- Een regio gaat in principe van ‘waakzaam’ naar ‘zorgelijk’ als er in een week meer dan 50 positieve testuitslagen per 100.000 inwoners zijn. Dit komt overeen met het elke dag overschrijden van de signaalwaarde van 7 positieve testuitslagen per 100.000 inwoners. Ook telt mee als meer dan 5 procent van de afgenomen testen positief is.\n- Een regio gaat in principe van ‘zorgelijk’ naar ‘ernstig’ als er in een week meer dan 150 positieve testuitslagen per 100.000 inwoners zijn. Of als meer dan 10 procent van de afgenomen testen positief is.\n- Een regio gaat in principe over van ‘ernstig’ naar ‘zeer ernstig’ als er meer dan 250 positieve testuitslagen per 100.000 inwoners zijn gedurende een week. Als in meerdere regio’s de situatie zeer ernstig is, gelden de zwaarste maatregelen voor het hele land. \n\nElke maandag berekent het RIVM welke regio’s hieraan voldoen. In de dagen erna wordt dieper in de situatie in deze regio’s gedoken. Als de situatie inderdaad zorgelijk of ernstig is, kan de minister van VWS (Hugo de Jonge) besluiten een regio op een hoger risiconiveau te zetten. Bovenstaande criteria zijn dus bedoeld als ‘leidraad’. Ook wanneer een regio nog niet de grenswaarden bereikt heeft om op te schalen, kan op basis van de context en duiding besloten worden om een regio op te schalen.\n \n**Wanneer kan een regio terug naar een lager risiconiveau?**\n\nBij het bepalen of een regio terug kan naar een lager risiconiveau wordt grote voorzichtigheid betracht. Naast de het aantal nieuwe besmettingen wordt gekeken of de capaciteit in de zorg dit toelaat. Ook als het aantal nieuwe besmetting afneemt kan de zorg immers nog te maken hebben met een groot aantal patiënten die nog herstellende zijn van corona. Daarbij moet ook het zorgpersoneel de kans krijgen om op adem te komen. Voorkomen moet worden dat het virus zich weer snel verspreidt en de zorg overvraagd wordt.\n\n**Wat betekenen de vier risiconiveaus?**\n1. Waakzaam. De situatie is beheersbaar. Het aantal nieuwe besmettingen is laag. Kwetsbare groepen dienen alert te zijn. Het bron-en contactonderzoek is overwegend effectief. Maatregelen worden voldoende nageleefd en zijn te handhaven. Er is voldoende zorgcapaciteit. Aanvullende maatregelen zijn erop gericht om de bestaande aanpak beter te laten functioneren.\n2. Zorgelijk. De situatie ontwikkelt zich negatief. Het aantal nieuwe besmettingen neemt toe. Maatwerk is nodig om kwetsbare groepen te beschermen. Als de situatie voortduurt, wordt het bron- en contactonderzoek ineffectief. Maatregelen worden onvoldoende nageleefd. De druk op de zorgcapaciteit neemt toe. De bestaande aanpak moet met aanvullende maatregelen worden versterkt om de verspreiding van het virus weer onder controle te krijgen en terug te keren naar een beheersbare situatie.\n3. Ernstig. Hard ingrijpen is noodzakelijk om verdere escalatie te voorkomen en terug te keren naar een beheersbare situatie. Het aantal nieuwe besmettingen neemt snel toe. Intensief maatwerk is nodig om kwetsbare groepen te beschermen. Het bron- en contactonderzoek is niet meer effectief, waardoor het zicht op de verspreiding afneemt. Maatregelen worden onvoldoende nageleefd. De zorgcapaciteit is onvoldoende. Maatregelen zijn erop gericht om (regionale) overbelasting van de zorg te voorkomen, kwetsbaren te beschermen en weer zicht op de verspreiding van het virus te krijgen.\n4. Zeer ernstig. Strenge, landelijke maatregelen zijn noodzakelijk om verdere escalatie te voorkomen en terug te keren naar een beheersbare situatie (waakzaam). Er zijn zeer veel mensen besmettelijk en het dagelijks aantal nieuwe besmettingen is hoog. Het bron- en contactonderzoek is niet meer effectief, waardoor het zicht op de verspreiding van het virus beperkt is. Maatregelen worden onvoldoende nageleefd. De regionale zorgcapaciteit is onvoldoende en een deel van de reguliere zorg is al afgeschaald. Maatregelen zijn erop gericht om landelijk en regionaal overbelasting van de zorg te voorkomen, kwetsbaren te beschermen en het virus weer maximaal te controleren."
+    "toelichting": "Iedere week wordt bekeken of de situatie rond het coronavirus zich positief of negatief ontwikkelt. Dan beoordelen het Rijk, de GGD’en, het RIVM en de veiligheidsregio’s samen de situatie. De minister van VWS stelt vervolgens vast op welk risiconiveau een regio zit. Moeten we waakzaam zijn (niveau 1), is de situatie zorgelijk (niveau 2),is de situatie  ernstig (niveau 3), of is de situatie zelfs zeer ernstig te noemen (niveau 4)?\n\nOp basis van het risiconiveau nemen het Rijk en/of de veiligheidsregio passende maatregelen. Maatregelen zijn afhankelijk van de lokale situatie en kunnen daarom tussen regio’s verschillen.\n\n**Wat bepaalt het risiconiveau van een regio?**\n\nIn welk risiconiveau een regio zit, wordt bepaald door te kijken naar de situatie van een regio, die van de omliggende regio’s en de situatie in de rest van het land. Dit gebeurt op basis van informatie van het coronadashboard, het weekrapport van het RIVM, de duiding van de GGD’en en de duiding van de veiligheidsregio’s.\n\nVoor het risiconiveau van een regio wordt gelet op een aantal aspecten, bijvoorbeeld:\n\n- Hoe snel neemt het aantal nieuwe besmettingen toe?\n- Zijn er extra maatregelen nodig voor kwetsbare groepen?\n- Hoe effectief is het bron- en contactonderzoek nog?\n- Hoe goed worden de maatregelen nageleefd?\n- Is er nog voldoende zorg beschikbaar?\n\n**Wanneer gaat een regio naar ‘zorgelijk’, ‘ernstig’ of ‘zeer ernstig’?**\n- Een regio gaat in principe van ‘waakzaam’ naar ‘zorgelijk’ als er in een week meer dan 50 positieve testuitslagen per 100.000 inwoners zijn. Dit komt overeen met het elke dag overschrijden van de signaalwaarde van 7 positieve testuitslagen per 100.000 inwoners. Ook telt mee als meer dan 5 procent van de afgenomen testen positief is.\n- Een regio gaat in principe van ‘zorgelijk’ naar ‘ernstig’ als er in een week meer dan 150 positieve testuitslagen per 100.000 inwoners zijn. Of als meer dan 10 procent van de afgenomen testen positief is.\n- Een regio gaat in principe over van ‘ernstig’ naar ‘zeer ernstig’ als er meer dan 250 positieve testuitslagen per 100.000 inwoners zijn gedurende een week. Als in meerdere regio’s de situatie zeer ernstig is, gelden de zwaarste maatregelen voor het hele land. \n\nElke maandag berekent het RIVM welke regio’s hieraan voldoen. In de dagen erna wordt dieper in de situatie in deze regio’s gedoken. Als de situatie inderdaad zorgelijk of ernstig is, kan de minister van VWS (Hugo de Jonge) besluiten een regio op een hoger risiconiveau te zetten. Bovenstaande criteria zijn dus bedoeld als ‘leidraad’. Ook wanneer een regio nog niet de grenswaarden bereikt heeft om op te schalen, kan op basis van de context en duiding besloten worden om een regio op te schalen.\n \n**Wanneer kan een regio terug naar een lager risiconiveau?**\n\nBij het bepalen of een regio terug kan naar een lager risiconiveau wordt grote voorzichtigheid betracht. Naast het aantal nieuwe besmettingen wordt gekeken of de capaciteit in de zorg dit toelaat. Ook als het aantal nieuwe besmetting afneemt kan de zorg immers nog te maken hebben met een groot aantal patiënten die nog herstellende zijn van corona. Daarbij moet ook het zorgpersoneel de kans krijgen om op adem te komen. Voorkomen moet worden dat het virus zich weer snel verspreidt en de zorg overvraagd wordt.\n\n**Wat betekenen de vier risiconiveaus?**\n1. Waakzaam. De situatie is beheersbaar. Het aantal nieuwe besmettingen is laag. Kwetsbare groepen dienen alert te zijn. Het bron-en contactonderzoek is overwegend effectief. Maatregelen worden voldoende nageleefd en zijn te handhaven. Er is voldoende zorgcapaciteit. Aanvullende maatregelen zijn erop gericht om de bestaande aanpak beter te laten functioneren.\n2. Zorgelijk. De situatie ontwikkelt zich negatief. Het aantal nieuwe besmettingen neemt toe. Maatwerk is nodig om kwetsbare groepen te beschermen. Als de situatie voortduurt, wordt het bron- en contactonderzoek ineffectief. Maatregelen worden onvoldoende nageleefd. De druk op de zorgcapaciteit neemt toe. De bestaande aanpak moet met aanvullende maatregelen worden versterkt om de verspreiding van het virus weer onder controle te krijgen en terug te keren naar een beheersbare situatie.\n3. Ernstig. Hard ingrijpen is noodzakelijk om verdere escalatie te voorkomen en terug te keren naar een beheersbare situatie. Het aantal nieuwe besmettingen neemt snel toe. Intensief maatwerk is nodig om kwetsbare groepen te beschermen. Het bron- en contactonderzoek is niet meer effectief, waardoor het zicht op de verspreiding afneemt. Maatregelen worden onvoldoende nageleefd. De zorgcapaciteit is onvoldoende. Maatregelen zijn erop gericht om (regionale) overbelasting van de zorg te voorkomen, kwetsbaren te beschermen en weer zicht op de verspreiding van het virus te krijgen.\n4. Zeer ernstig. Strenge, landelijke maatregelen zijn noodzakelijk om verdere escalatie te voorkomen en terug te keren naar een beheersbare situatie (waakzaam). Er zijn zeer veel mensen besmettelijk en het dagelijks aantal nieuwe besmettingen is hoog. Het bron- en contactonderzoek is niet meer effectief, waardoor het zicht op de verspreiding van het virus beperkt is. Maatregelen worden onvoldoende nageleefd. De regionale zorgcapaciteit is onvoldoende en een deel van de reguliere zorg is al afgeschaald. Maatregelen zijn erop gericht om landelijk en regionaal overbelasting van de zorg te voorkomen, kwetsbaren te beschermen en het virus weer maximaal te controleren."
   },
   "over_risiconiveaus_metadata": {
     "title": "Risiconiveaus Coronavirus COVID-19 Dashboard | Rijksoverheid.nl",
@@ -944,7 +955,13 @@
     "totaal_getest_week_uitleg": "Aantal personen die in één week via de GGD getest zijn, en waarvan de testuitslag bekend is.",
     "positief_getest_week_titel": "Positief geteste personen",
     "positief_getest_week_uitleg": "Aantal en percentage positief geteste personen die in één week via de GGD getest zijn. Voor het berekenen van het percentage worden alleen tests meegeteld waarvan de testuitslag bekend is.",
-    "positief_getest_getest_week_uitleg": "Dit zijn {{numerator}} van {{denominator}} geteste personen"
+    "positief_getest_getest_week_uitleg": "Dit zijn {{numerator}} van {{denominator}} geteste personen",
+    "linechart_percentage_titel": "Percentage positieve testen over tijd",
+    "linechart_percentage_toelichting": "Deze grafiek toont het percentage positief geteste mensen door de GGD over tijd",
+    "linechart_totaltests_titel": "Aantal testen over tijd",
+    "linechart_totaltests_toelichting": "Deze grafiek toont het aantal afgenomen testen over tijd in vergelijking met het aantal positieve testen.",
+    "linechart_totaltests_legend_label": "Alle GGD tests",
+    "linechart_positivetests_legend_label": "Alle positieve testen van de GGD"
   },
   "veiligheidsregio_verpleeghuis_oversterfte": {
     "datums": "Waarde van {{dateOfReport}}. Verkregen: {{dateOfInsertion}}. Wordt dagelijks bijgewerkt.",
@@ -1009,5 +1026,10 @@
       "description": "Overzicht aantal bewoners van verpleeghuizen in veiligheidsregio {{safetyRegionName}} waarbij COVID-19-besmetting is vastgesteld."
     }
   },
-  "data_warning_text": "Let op: De regionale gegevens zijn minder actueel dan de landelijk gegevens. We werken eraan om deze gelijk te trekken. Voor uitleg zie de cijferverantwoording."
+  "data_warning_text": "Let op: De regionale gegevens zijn minder actueel dan de landelijk gegevens. We werken eraan om deze gelijk te trekken. Voor uitleg zie de cijferverantwoording.",
+  "veelgestelde_vragen_metadata": {
+    "title": "Veelgestelde vragen | Dashboard Coronavirus COVID-19 | Rijksoverheid.nl",
+    "description": "Informatie over de ontwikkeling van het coronavirus in Nederland.",
+    "url": "https://coronadashboard.rijksoverheid.nl/veelgestelde-vragen"
+  }
 }

@@ -4,33 +4,48 @@ import React, { useMemo, useState } from 'react';
 import { isDefined } from 'ts-is-present';
 import { ChartTimeControls } from '~/components-styled/chart-time-controls';
 import text from '~/locale/index';
+import { assert } from '~/utils/assert';
 import { formatDateFromSeconds } from '~/utils/formatDate';
-import { formatNumber } from '~/utils/formatNumber';
+import { formatNumber, formatPercentage } from '~/utils/formatNumber';
 import { getFilteredValues, TimeframeOption } from '~/utils/timeframe';
 import styles from './lineChart.module.scss';
 
-export type Value = {
+type Value = {
   date: number;
   value: number;
 };
 
+type LineConfig = {
+  color: string;
+  legendLabel: string;
+};
+
 const SIGNAALWAARDE_Z_INDEX = 5;
 
-export interface LineChartProps {
+const sixDaysInSeconds = 518400;
+
+interface LineChartProps {
   title: string;
   description?: string;
-  values: Value[];
+  values: Value[][];
+  linesConfig: LineConfig[];
   signaalwaarde?: number;
   timeframeOptions?: TimeframeOption[];
-  formatTooltip?: (x: number, y: number) => string;
 }
 
 function getChartOptions(
-  values: Value[],
-  signaalwaarde?: number,
-  formatTooltip?: (x: number, y: number) => string
+  values: Value[][],
+  linesConfig: LineConfig[],
+  signaalwaarde?: number
 ) {
-  const yMax = calculateYMax(values, signaalwaarde);
+  const yMax = values.reduce((max, list) => {
+    const listMax = calculateYMax(list, signaalwaarde);
+    return Math.max(max, listMax);
+  }, 0);
+
+  const categories = values
+    .flatMap((value) => value.map((value) => value.date.toString()))
+    .filter((date, index, self) => self.indexOf(date) === index);
 
   const options: Highcharts.Options = {
     chart: {
@@ -54,7 +69,7 @@ function getChartOptions(
       title: {
         text: null,
       },
-      categories: values.map((value) => value.date.toString()),
+      categories: categories,
       labels: {
         align: 'right',
         // types say `rotation` needs to be a number,
@@ -66,16 +81,31 @@ function getChartOptions(
             : '';
         },
       },
+      crosshair: true,
     },
     tooltip: {
       backgroundColor: '#FFF',
       borderColor: '#01689B',
       borderRadius: 0,
+      shared: true,
+      useHTML: true,
       formatter: function (): string {
-        if (formatTooltip) {
-          return formatTooltip(this.x, this.y);
-        }
-        return `${formatDateFromSeconds(this.x)}: ${formatNumber(this.y)}`;
+        const percentage =
+          ((this.points as any[])[1].y * 100) / (this.points as any[])[0].y;
+
+        return `${formatDateFromSeconds(
+          +this.x - +sixDaysInSeconds
+        )} - ${formatDateFromSeconds(+this.x)}<br/>
+        <span style="height: 0.5em;width: 0.5em;background-color: ${
+          linesConfig[0].color
+        };border-radius: 50%;display: inline-block;"></span> ${formatNumber(
+          (this.points as any[])[0].y
+        )}<br/>
+        <span style="height: 0.5em;width: 0.5em;background-color: ${
+          linesConfig[1].color
+        };border-radius: 50%;display: inline-block;"></span> ${formatNumber(
+          (this.points as any[])[1].y
+        )} (${formatPercentage(percentage)}%)`;
       },
     },
     yAxis: {
@@ -135,22 +165,19 @@ function getChartOptions(
     title: {
       text: undefined,
     },
-    series: [
-      {
-        type: 'area',
-        data: values.map((value) => value.value as number),
-        name: '',
-        showInLegend: false,
-        color: '#3391CC',
-        // hex to rgb converted, added opacity
-        fillColor: 'rgba(51, 145, 204, 0.2)',
-        marker: {
-          enabled: false,
-        },
+    series: values.map((list, index) => ({
+      type: 'line',
+      data: list.map((value) => value.value as number),
+      name: linesConfig[index].legendLabel,
+      showInLegend: true,
+      color: linesConfig[index].color,
+      // hex to rgb converted, added opacity
+      marker: {
+        enabled: false,
       },
-    ],
+    })),
     plotOptions: {
-      area: {
+      line: {
         marker: {
           enabled: false,
           symbol: 'circle',
@@ -168,24 +195,31 @@ function getChartOptions(
   return options;
 }
 
-export default function LineChart({
+export function MultipleLineChart({
   title,
   description,
   values,
+  linesConfig,
   signaalwaarde,
   timeframeOptions,
-  formatTooltip,
 }: LineChartProps) {
   const [timeframe, setTimeframe] = useState<TimeframeOption>('5weeks');
 
+  assert(
+    values.length === linesConfig.length,
+    'values length must equal linesConfig length'
+  );
+
   const chartOptions = useMemo(() => {
-    const filteredValues = getFilteredValues<Value>(
-      values,
-      timeframe,
-      (value: Value) => value.date * 1000
-    );
-    return getChartOptions(filteredValues, signaalwaarde, formatTooltip);
-  }, [values, timeframe, signaalwaarde, formatTooltip]);
+    const filteredValueLists = values.map((lineValues) => {
+      return getFilteredValues<Value>(
+        lineValues,
+        timeframe,
+        (value: Value) => value.date * 1000
+      );
+    });
+    return getChartOptions(filteredValueLists, linesConfig, signaalwaarde);
+  }, [values, linesConfig, timeframe, signaalwaarde]);
 
   return (
     <section className={styles.root}>

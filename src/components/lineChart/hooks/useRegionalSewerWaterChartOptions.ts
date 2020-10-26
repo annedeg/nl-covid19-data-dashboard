@@ -13,6 +13,35 @@ type Week = {
   end: number;
 };
 
+function calculateDaysBetween(date1: number, date2: number) {
+  const OneDay = 1000 * 60 * 60 * 24;
+
+  const date1Milliseconds = date1 * 1000;
+  const date2Milliseconds = date2 * 1000;
+
+  const difference_ms = Math.abs(date1Milliseconds - date2Milliseconds);
+
+  return Math.floor(difference_ms / OneDay);
+}
+
+/**
+ * This function calculates the difference in days between the last RWZI measurement
+ * and the last average and returns an array of data that is used to draw the dashed line
+ * at the end of the averages.
+ */
+function createRemainingDaysData(value: Value, maxDate: number) {
+  const dataPointLength =
+    calculateDaysBetween(value.week_start_unix, maxDate) + 1;
+
+  const data = [...new Array(dataPointLength)];
+  const oneDay = 60 * 60 * 24;
+
+  return data.map((_, index) => {
+    const extraDays = index * oneDay;
+    return [value.week_start_unix + extraDays, value.value];
+  });
+}
+
 export function useRegionalSewerWaterChartOptions(
   averageValues: Value[],
   scatterPlotValues: SewerValue[],
@@ -20,38 +49,52 @@ export function useRegionalSewerWaterChartOptions(
   timeframe: TimeframeOption,
   selectedRWZI?: string
 ): Highcharts.Options {
+  const filteredAverageValues = useMemo(
+    () =>
+      getFilteredValues(averageValues, timeframe, (value) => value.date * 1000),
+    [averageValues, timeframe]
+  );
+
+  const filteredScatterPlotValues = useMemo(
+    () =>
+      getFilteredValues(
+        scatterPlotValues,
+        timeframe,
+        (value) => value.date_measurement_unix * 1000
+      ),
+    [scatterPlotValues, timeframe]
+  );
+
   return useMemo(() => {
-    const hasMultipleValues = averageValues.length > 1;
+    const hasMultipleValues = filteredAverageValues.length > 1;
 
-    averageValues = getFilteredValues(
-      averageValues,
-      timeframe,
-      (value) => value.date * 1000
-    );
-    scatterPlotValues = getFilteredValues(
-      scatterPlotValues,
-      timeframe,
-      (value) => value.date_measurement_unix * 1000
-    );
-
-    const weekSet: Week[] = averageValues.map((value) => ({
+    const weekSet: Week[] = filteredAverageValues.map((value) => ({
       start: value.week_start_unix,
       end: value.week_end_unix,
     }));
 
-    const weekSets: Record<string, Week[]> = {
+    let maxDate = filteredAverageValues.reduce((max, value) => {
+      return Math.max(max, value.week_end_unix);
+    }, 0);
+    maxDate = filteredScatterPlotValues.reduce((max, value) => {
+      return Math.max(max, value.date_measurement_unix);
+    }, maxDate);
+
+    const tooltipTypes: Record<string, Week[] | 'rwzi' | 'scatter'> = {
       [text.average_label_text]: weekSet,
+      [text.secondary_label_text]: 'scatter',
     };
 
     const scatterSerie: SeriesScatterOptions = {
       type: 'scatter',
-      enableMouseTracking: false,
       name: text.secondary_label_text,
       description: text.secondary_label_text,
       color: '#CDCDCD',
-      data: scatterPlotValues?.map((value) => ({
+      enableMouseTracking: selectedRWZI === undefined,
+      data: filteredScatterPlotValues?.map((value) => ({
         x: value.date_measurement_unix,
         y: value.rna_per_ml,
+        installationName: value.rwzi_awzi_name,
       })),
       marker: {
         symbol: 'circle',
@@ -63,7 +106,7 @@ export function useRegionalSewerWaterChartOptions(
 
     series.push({
       type: 'line',
-      data: averageValues.map((x) => [x.date, x.value]),
+      data: filteredAverageValues.map((x) => [x.date, x.value]),
       name: text.average_label_text,
       description: text.average_label_text,
       showInLegend: true,
@@ -81,8 +124,37 @@ export function useRegionalSewerWaterChartOptions(
       },
     });
 
+    if (
+      maxDate >
+      filteredAverageValues[filteredAverageValues.length - 1].week_end_unix
+    ) {
+      series.push({
+        type: 'line',
+        data: createRemainingDaysData(
+          filteredAverageValues[filteredAverageValues.length - 1],
+          maxDate
+        ),
+        name: '',
+        description: '',
+        showInLegend: false,
+        color: selectedRWZI ? '#A9A9A9' : '#3391CC',
+        enableMouseTracking: false,
+        allowPointSelect: false,
+        dashStyle: 'ShortDash',
+        marker: {
+          symbol: 'circle',
+          enabled: !hasMultipleValues,
+        },
+        states: {
+          inactive: {
+            opacity: 1,
+          },
+        },
+      });
+    }
+
     if (selectedRWZI) {
-      const scatterValues = scatterPlotValues.filter(
+      const scatterValues = filteredScatterPlotValues.filter(
         (value) => value.rwzi_awzi_name === selectedRWZI
       );
       if (scatterValues.length) {
@@ -91,6 +163,7 @@ export function useRegionalSewerWaterChartOptions(
           data: scatterValues.map((scatterValue) => ({
             x: scatterValue.date_measurement_unix,
             y: scatterValue.rna_per_ml,
+            rwzi: true,
           })),
           name: selectedRWZI,
           description: replaceVariablesInText(text.daily_label_text, {
@@ -110,12 +183,7 @@ export function useRegionalSewerWaterChartOptions(
         });
       }
 
-      weekSets[selectedRWZI] = scatterPlotValues
-        .filter((plot) => plot.rwzi_awzi_name === selectedRWZI)
-        .map((value) => ({
-          start: value.week_start_unix,
-          end: value.week_end_unix,
-        }));
+      tooltipTypes[selectedRWZI] = 'rwzi';
     }
 
     const options: Highcharts.Options = {
@@ -146,7 +214,9 @@ export function useRegionalSewerWaterChartOptions(
         title: {
           text: null,
         },
-        categories: averageValues.map((value) => value?.date.toString()),
+        categories: filteredAverageValues.map((value) =>
+          value?.date.toString()
+        ),
         labels: {
           align: 'right',
           // types say `rotation` needs to be a number,
@@ -182,25 +252,41 @@ export function useRegionalSewerWaterChartOptions(
         borderColor: '#01689B',
         borderRadius: 0,
         formatter: function (): false | string {
-          const weeks = weekSets[this.series.name];
+          const tooltipType = tooltipTypes[this.series.name];
 
-          if (!weeks) {
+          if (!tooltipType) {
             return false;
           }
 
-          const { start, end } = getItemFromArray(weeks, this.point.index);
+          if (Array.isArray(tooltipType)) {
+            const { start, end } = getItemFromArray(
+              tooltipType,
+              this.point.index
+            );
 
-          return `<strong>${formatDateFromSeconds(
-            start,
-            'short'
-          )} - ${formatDateFromSeconds(end, 'short')}:</strong> ${formatNumber(
-            this.y
-          )}<br/>(${this.series.name})`;
+            return `<strong>${formatDateFromSeconds(
+              start,
+              'short'
+            )} - ${formatDateFromSeconds(
+              end,
+              'short'
+            )}:</strong> ${formatNumber(this.y)}<br/>(${this.series.name})`;
+          } else if (tooltipType === 'rwzi') {
+            return `<strong>${formatDateFromSeconds(this.point.x)}:</strong> ${
+              this.point.y
+            }<br/>(${this.series.name})`;
+          } else if (tooltipType === 'scatter') {
+            return `<strong>${formatDateFromSeconds(this.point.x)}:</strong> ${
+              this.point.y
+            }<br/>(${(this.point as any).installationName})`;
+          }
+
+          return false;
         },
       },
       series,
     };
 
     return options;
-  }, [averageValues, scatterPlotValues, text, selectedRWZI, timeframe]);
+  }, [filteredAverageValues, filteredScatterPlotValues, text, selectedRWZI]);
 }
