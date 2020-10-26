@@ -32,7 +32,7 @@ const visitors: Record<number, (child: any) => void> = {
     if (child.initializer?.kind === SyntaxKind.PropertyAccessExpression) {
       const initializer: PropertyAccessExpression = child.initializer as PropertyAccessExpression;
       if (!localeIdentifiers.has(initializer.name)) {
-        localeIdentifiers.set(child.name, undefined);
+        //localeIdentifiers.set(child.name, undefined);
       }
     }
   },
