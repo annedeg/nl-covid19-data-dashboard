@@ -124,7 +124,8 @@
     "cy:open": "cypress open",
     "e2e:ci": "yarn build && start-test 3000 cy:ci",
     "cy:ci": "cypress run --headless --browser chrome",
-    "download": "download https://coronadashboard.rijksoverheid.nl/latest-data.zip -e -o public/"
+    "download": "download https://coronadashboard.rijksoverheid.nl/latest-data.zip -e -o public/",
+    "lc": "ts-node --project src/tools/tsconfig.json src/tools/locale-check/check-locale-usage.ts"
   },
   "browserslist": [
     "defaults",
