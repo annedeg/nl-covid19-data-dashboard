@@ -13,6 +13,17 @@ export default {
   fields: [
     { title: "Tile", name: "name", type: "string" },
     {
+      title: "Announcement date",
+      name: "announcementDate",
+      type: "datetime",
+      options: {
+        dateFormat: "YYYY-MM-DD",
+        timeFormat: "HH:mm",
+        timeStep: 15,
+        calendarTodayLabel: "Today",
+      },
+    },
+    {
       title: "Title",
       name: "title",
       type: "localeString",

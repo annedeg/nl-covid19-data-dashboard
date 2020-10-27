@@ -5,13 +5,19 @@ import createSchema from "part:@sanity/base/schema-creator";
 import schemaTypes from "all:part:@sanity/base/schema-type";
 
 //content
-import tile from "./tile";
-import settings from "./settings";
-import laatsteOntwikkelingen from "./laatste-ontwikkelingen";
+import tiles from "./documents/tiles";
+import siteSettings from "./documents/siteSettings";
+import laatsteOntwikkelingen from "./documents/laatste-ontwikkelingen";
+import categories from "./documents/category";
+import page from "./documents/page";
+import post from "./documents/post";
 
-//types
+//objects
 import localeString from "./locale-string";
 import localeBlock from "./locale-block";
+import openGraph from "./objects/open-graph";
+import mainImage from "./objects/main-image";
+import risicoNiveau from "./objects/risico-niveau";
 
 // Then we give our schema to the builder and provide the result to Sanity
 export default createSchema({
@@ -20,12 +26,18 @@ export default createSchema({
   // Then proceed to concatenate our document type
   // to the ones provided by any plugins that are installed
   types: schemaTypes.concat([
-    //content
-    tile,
-    settings,
+    //documents
+    tiles,
+    siteSettings,
     laatsteOntwikkelingen,
-    //types
+    categories,
+    page,
+    post,
+    //objects
     localeString,
     localeBlock,
+    openGraph,
+    mainImage,
+    risicoNiveau,
   ]),
 });
